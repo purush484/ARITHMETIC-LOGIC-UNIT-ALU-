@@ -1,0 +1,44 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+entity ALU is
+    Port (
+        a      : in  STD_LOGIC_VECTOR (7 downto 0);
+        b      : in  STD_LOGIC_VECTOR (7 downto 0);
+        opcode : in  STD_LOGIC_VECTOR (2 downto 0);
+        result : out STD_LOGIC_VECTOR (7 downto 0);
+        zero   : out STD_LOGIC
+    );
+end ALU;
+
+architecture Behavioral of ALU is
+    signal res : STD_LOGIC_VECTOR(7 downto 0); -- Declare internal result signal
+begin
+
+    process(a, b, opcode)
+    begin
+        case opcode is
+            when "000" =>  -- ADD
+                res <= a + b;
+            when "001" =>  -- SUB
+                res <= a - b;
+            when "010" =>  -- AND
+                res <= a and b;
+            when "011" =>  -- OR
+                res <= a or b;
+            when "100" =>  -- XOR
+                res <= a xor b;
+            when "101" =>  -- NOT A
+                res <= not a;
+            when "110" =>  -- Shift Left
+                res <= a(6 downto 0) & '0';
+            when "111" =>  -- Shift Right
+                res <= '0' & a(7 downto 1);
+            when others =>
+                res <= (others => '0');
+        end case;
+    end process;
+
+    result <= res;
+    zero <= '1' when res = "00000000" else '0';
+end Behavioral;
